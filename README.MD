@@ -1,7 +1,7 @@
 # Pseudo-3D road
 Pseudo-3D road with random curves and hills
 
-![Pseudo3D road](https://github.com/BojanSof/Pseudo3D-road/blob/master/images/pseudo3d_road.gif)
+![Pseudo3D road](https://github.com/BojanSof/Pseudo3D-road/blob/main/images/pseudo3d_road.gif)
 
 Pseudo-3D (or 2.5D) perspective creates the illsuion of environment with three dimensions by using two-dimensional plane.
 

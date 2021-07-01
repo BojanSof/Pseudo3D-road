@@ -23,6 +23,13 @@ make
 ```
 # Running the program
 Run the executable app in the bin folder.
+## Keyboard commands
+- Up key: increase speed
+- Down key: decrease speed
+- A key: move camera to the left
+- D key: move camera to the right
+- W key: increase camera's height
+- S key: decrease camera's height
 # Resources
 Main resources I used for creating the program:
 

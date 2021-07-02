@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include <array>
 #include <string>
+#include <sstream>
 
 namespace Pseudo3D {
 
@@ -19,7 +20,7 @@ public:
     bool isRunning() const;
     void reset();
     void handleEvents();
-    void update(/*const sf::Time &dt*/);
+    void update();
     void display();
 
     void run();
@@ -27,13 +28,17 @@ public:
 private:
     std::string title;
     sf::RenderWindow window;
-    sf::Clock clock;
     bool running, redraw;
     Object player;
     Camera cam;
     Quad qGrass, qRoad, qRumble, qRoadLine;
     Road road;
-    float delta;
+    float delta, speed;
+    
+    sf::Font font;
+    sf::Text text;
+    std::stringstream ss;
+    bool updateText;
 };
 
 }

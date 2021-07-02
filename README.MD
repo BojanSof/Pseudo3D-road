@@ -30,6 +30,10 @@ Run the executable app in the bin folder.
 - D key: move camera to the right
 - W key: increase camera's height
 - S key: decrease camera's height
+- ] key: increase movement's delta
+- [ key: decrease movement's delta
+- R key: increase Field Of View (FOV)
+- F key: decrease Field Of View (FOV)
 # Resources
 Main resources I used for creating the program:
 

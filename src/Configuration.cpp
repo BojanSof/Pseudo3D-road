@@ -7,22 +7,29 @@ float Pseudo3D::Configuration::roadWidth = 2500.0f;
 float Pseudo3D::Configuration::roadSegLen = 250.0f;
 
 float Pseudo3D::Configuration::camHeight = 1800.0f;
-float Pseudo3D::Configuration::camHeightMin = 500.0f;
+float Pseudo3D::Configuration::camHeightMin = 700.0f;
 float Pseudo3D::Configuration::camHeightMax = 5000.0f;
 
 float Pseudo3D::Configuration::FOV = 100.0f;
-float Pseudo3D::Configuration::FOVMin = 60.0f;
-float Pseudo3D::Configuration::FOVMax = 140.0f;
+float Pseudo3D::Configuration::FOVMin = 80.0f;
+float Pseudo3D::Configuration::FOVMax = 120.0f;
+float Pseudo3D::Configuration::dFOV = 5.0f;
 
 float Pseudo3D::Configuration::delta = Pseudo3D::Configuration::roadSegLen;
 float Pseudo3D::Configuration::deltaMin = 0.25f*Pseudo3D::Configuration::roadSegLen;
 float Pseudo3D::Configuration::deltaMax = 2.0f*Pseudo3D::Configuration::roadSegLen;
+float Pseudo3D::Configuration::dDelta = 5.0f;
+
+float Pseudo3D::Configuration::speed = Pseudo3D::Configuration::roadSegLen;
+float Pseudo3D::Configuration::speedMin = 0.5f*Pseudo3D::Configuration::roadSegLen;
+float Pseudo3D::Configuration::speedMax = 2.0f*Pseudo3D::Configuration::roadSegLen;
+float Pseudo3D::Configuration::dSpeed = 5.0f;
 
 size_t Pseudo3D::Configuration::drawDistance = 100;
 size_t Pseudo3D::Configuration::drawDistanceMin = 200;
 size_t Pseudo3D::Configuration::drawDistanceMax = 50;
 
-unsigned int Pseudo3D::Configuration::FPS = 60;
+unsigned int Pseudo3D::Configuration::FPS = 100;
 
 unsigned int Pseudo3D::Configuration::roadSegmentsMin = 3;
 unsigned int Pseudo3D::Configuration::roadSegmentsMax = 10;

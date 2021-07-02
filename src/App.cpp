@@ -7,9 +7,21 @@ Pseudo3D::App::App() :  title("Pseudo 3D"),
                         window(sf::VideoMode(Pseudo3D::Configuration::width, Pseudo3D::Configuration::height, 32), title),
                         running(true), redraw(true),
                         cam(0.0f, Pseudo3D::Configuration::camHeight, 0.0f, Pseudo3D::Configuration::FOV),
-                        delta(Pseudo3D::Configuration::delta)
+                        delta(Pseudo3D::Configuration::delta), speed(Pseudo3D::Configuration::speed),
+                        updateText(false)
                         {
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(Pseudo3D::Configuration::FPS);
+    if(!font.loadFromFile("fonts/arial.ttf")) {
+        std::cerr << "Error loading font arial.ttf" << std::endl;
+    }
+    ss  << "Speed: " << speed << "\n"
+        << "Delta: " << delta << "\n"
+        << "FOV: " << cam.getFOV() << "\n";
+    text.setFont(font);
+    text.setCharacterSize(22);
+    text.setFillColor(sf::Color(0,0,0,150));
+    text.setStyle(sf::Text::Bold);
+    text.setString(ss.str());
     road.randomRoad();
 }
 
@@ -41,6 +53,42 @@ void Pseudo3D::App::handleEvents() {
                     case sf::Keyboard::Escape:
                         running = false;
                     break;
+                    case sf::Keyboard::R:
+                        if(cam.getFOV() < Pseudo3D::Configuration::FOVMax) {
+                            cam.setFOV(cam.getFOV() + Pseudo3D::Configuration::dFOV);
+                            updateText = true;
+                        }
+                    break;
+                    case sf::Keyboard::F:
+                        if(cam.getFOV() > Pseudo3D::Configuration::FOVMin) {
+                            cam.setFOV(cam.getFOV() - Pseudo3D::Configuration::dFOV);
+                            updateText = true;
+                        }
+                    break;
+                    case sf::Keyboard::Up:
+                        if(speed < Pseudo3D::Configuration::speedMax) {
+                            speed += Pseudo3D::Configuration::dSpeed;
+                            updateText = true;
+                        }
+                    break;
+                    case sf::Keyboard::Down:
+                        if(speed > Pseudo3D::Configuration::speedMin) {
+                            speed -= Pseudo3D::Configuration::dSpeed;
+                            updateText = true;
+                        }
+                    break;
+                    case sf::Keyboard::RBracket:
+                        if(delta < Pseudo3D::Configuration::deltaMax) {
+                            delta += Pseudo3D::Configuration::dDelta;
+                            updateText = true;
+                        }
+                    break;
+                    case sf::Keyboard::LBracket:
+                        if(delta > Pseudo3D::Configuration::deltaMin) {
+                            delta -= Pseudo3D::Configuration::dDelta;
+                            updateText = true;
+                        }
+                    break;
                     default:
                     break;
                 }
@@ -70,32 +118,18 @@ void Pseudo3D::App::handleEvents() {
         }
         redraw = true;
     }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-        if(cam.getFOV() < Pseudo3D::Configuration::FOVMax)
-            cam.setFOV(cam.getFOV() + 5.0f);
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::F)) {
-        if(cam.getFOV() > Pseudo3D::Configuration::FOVMin)
-            cam.setFOV(cam.getFOV() - 5.0f);
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-        if(delta < Pseudo3D::Configuration::deltaMax)
-            delta += 5.0f;
-    }
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-        if(delta > Pseudo3D::Configuration::deltaMin)
-            delta -= 5.0f;
-    }
 }
 
-void Pseudo3D::App::update(/*const sf::Time &dt*/) {
+void Pseudo3D::App::update() {
+    //automatic movement
     redraw = true;
-    cam.setZ(cam.getZ() + delta);
+    cam.setZ(cam.getZ() + speed);
     if(cam.getZ() >= road.getLength() * Pseudo3D::Configuration::roadSegLen) {
         cam.setZ(cam.getZ() - road.getLength() * Pseudo3D::Configuration::roadSegLen);
     }
+
     if(!redraw) return;
-    window.clear(sf::Color(0,146,230));
+    window.clear(sf::Color(6,123,191));
     size_t startPos = cam.getZ()/Pseudo3D::Configuration::roadSegLen;
     float x = 0.0f, dx = 0.0f;
     float camX = cam.getX(), camY = cam.getY(), camZ = cam.getZ();
@@ -123,8 +157,8 @@ void Pseudo3D::App::update(/*const sf::Time &dt*/) {
         maxY = std::get<1>(currProjection);
         sf::Color roadColor = ((i/3)%2) ? sf::Color(100,100,100) : sf::Color(120,120,120);
         sf::Color grassColor = ((i/3)%2) ? sf::Color(0,168,0) : sf::Color(0,190,0);
-        sf::Color rumbleColor = ((i/3)%2) ? sf::Color::Red : sf::Color::White;
-        sf::Color roadLineColor = ((i/3)%2) ? sf::Color(101,103,100) : sf::Color::White;
+        sf::Color rumbleColor = ((i/9)%2) ? sf::Color::Red : sf::Color::White;
+        sf::Color roadLineColor = ((i/6)%2) ? sf::Color::Transparent : sf::Color::White;
 
         qGrass.setXYWc( 0.5f * Pseudo3D::Configuration::width, 0.5f * Pseudo3D::Configuration::width,
                         std::get<1>(prevProjection), std::get<1>(currProjection),
@@ -150,6 +184,15 @@ void Pseudo3D::App::update(/*const sf::Time &dt*/) {
     cam.setX(camX);
     cam.setY(camY);
     cam.setZ(camZ);
+    if(updateText) {
+        ss.str(std::string());
+        ss  << "Speed: " << speed << "\n"
+            << "Delta: " << delta << "\n"
+            << "FOV: " << cam.getFOV() << "\n";
+        text.setString(ss.str());
+        updateText = false;
+    }
+    window.draw(text);
     redraw = false;
 }
 
@@ -158,15 +201,9 @@ void Pseudo3D::App::display() {
 }
 
 void Pseudo3D::App::run() {
-    //sf::Time timeSinceLastUpdate;
-    //sf::Time timePerFrame = sf::seconds(1.f/Pseudo3D::Configuration::FPS);
     while(isRunning()) {
-        //timeSinceLastUpdate += clock.restart();
-        //while(timeSinceLastUpdate > timePerFrame) {
-        //    timeSinceLastUpdate -= timePerFrame;
         handleEvents();
-        update(/*timePerFrame*/);
-    // }
+        update();
         display();
     }
 }

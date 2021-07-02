@@ -9,8 +9,9 @@ namespace Configuration {
     extern unsigned int width, height;
     extern float roadWidth, roadSegLen;
     extern float camHeight, camHeightMin, camHeightMax;
-    extern float FOV, FOVMin, FOVMax;
-    extern float delta, deltaMin, deltaMax;
+    extern float FOV, FOVMin, FOVMax, dFOV;
+    extern float delta, deltaMin, deltaMax, dDelta;
+    extern float speed, speedMin, speedMax, dSpeed;
     extern size_t drawDistance, drawDistanceMin, drawDistanceMax;
     
     extern unsigned int FPS;

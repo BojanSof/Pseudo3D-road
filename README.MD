@@ -9,9 +9,10 @@ The program renders random pseudo-3d road with random curves and hills.
 
 Tested under Ubuntu 20.04.
 ## Prerequisites
-GNU GCC Compiler with C++14 support
 
-SFML library (version 2.5.1 or greater)
+- GNU GCC Compiler with C++14 support
+- SFML 2.5.1
+
 ## Building
 Clone the repository
 ```
